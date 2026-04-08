@@ -8,6 +8,7 @@ const industries = [
   'Roofing',
   'Gutters',
   'Electrical',
+  'HVAC',
   'Painting',
   'General Contracting',
   'Concrete',

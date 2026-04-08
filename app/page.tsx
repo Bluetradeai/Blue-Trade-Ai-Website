@@ -13,10 +13,10 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <Industries />
       <Problem />
       <Solution />
       <Services />
-      <Industries />
       <WhyUs />
       <Process />
       <CTABanner />
