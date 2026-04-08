@@ -14,6 +14,7 @@ interface Message {
 interface ChatLead {
   name: string;
   phone: string;
+  email: string;
   timestamp: string;
 }
 
@@ -88,7 +89,7 @@ function getBotResponse(message: string): { text: string; showLeadCapture?: bool
   }
 
   return {
-    text: `That's a great question. Our team would be best equipped to answer that directly. Can I grab your name and number so we can reach out?`,
+    text: `That's a great question. Our team would be best equipped to answer that directly. Can I grab your name, number, and email so we can reach out?`,
     showLeadCapture: true,
   };
 }
@@ -106,17 +107,18 @@ function TypingIndicator() {
 function LeadCaptureForm({ onSubmit }: { onSubmit: () => void }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phone.trim()) {
-      setError('Please enter your name and phone number.');
+    if (!name.trim() || !phone.trim() || !email.trim()) {
+      setError('Please fill in your name, phone number, and email.');
       return;
     }
     const leads = JSON.parse(localStorage.getItem('bluetradeai_chat_leads') || '[]') as ChatLead[];
-    leads.push({ name: name.trim(), phone: phone.trim(), timestamp: new Date().toISOString() });
+    leads.push({ name: name.trim(), phone: phone.trim(), email: email.trim(), timestamp: new Date().toISOString() });
     localStorage.setItem('bluetradeai_chat_leads', JSON.stringify(leads));
     setSubmitted(true);
     onSubmit();
@@ -125,7 +127,7 @@ function LeadCaptureForm({ onSubmit }: { onSubmit: () => void }) {
   if (submitted) {
     return (
       <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-sm text-green-800">
-        Perfect! A member of our team will call you within one business day. Thanks for reaching out.
+        Perfect! A member of our team will be in touch within one business day. Thanks for reaching out!
       </div>
     );
   }
@@ -151,6 +153,14 @@ function LeadCaptureForm({ onSubmit }: { onSubmit: () => void }) {
         onChange={(e) => setPhone(e.target.value)}
         className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:ring-2 focus:ring-[#1A4D8F] focus:border-transparent outline-none"
         aria-label="Your phone number"
+      />
+      <input
+        type="email"
+        placeholder="Your Email Address"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full focus:ring-2 focus:ring-[#1A4D8F] focus:border-transparent outline-none"
+        aria-label="Your email address"
       />
       {error && <p className="text-red-500 text-xs">{error}</p>}
       <button
@@ -191,7 +201,7 @@ export default function ChatWidget() {
           id: 'welcome',
           role: 'bot',
           content:
-            "Hi there! I'm the Blue Trade AI assistant. I can answer questions about our services, tell you how we work, or connect you with our team. What can I help you with?",
+            "Hi! Ready to grow your trade business? We help contractors and home service companies get more calls, more booked jobs, and more revenue — using AI-powered websites, Google Ads, and automation. Want to see what that looks like for your business, or talk to our team about a free strategy session?",
           showQuickReplies: true,
         },
       ]);
@@ -259,7 +269,7 @@ export default function ChatWidget() {
           setTimeout(() => {
             setNudgeSent(true);
             addBotMessage(
-              "By the way — if it's easier, I can have someone from our team reach out directly. Want to leave your name and number?",
+              "By the way — if it's easier, I can have someone from our team reach out directly. Just drop your name, number, and email below.",
               true
             );
           }, 1200);
