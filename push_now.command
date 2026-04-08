@@ -14,7 +14,7 @@ ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
 echo "Pushing update to GitHub..."
 GIT_SSH_COMMAND="ssh -i $KEY_TMP -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/dev/null" \
   git add -A && \
-  git commit -m "Reorder navbar: Industries moved to second position after Home" && \
+  git commit -m "Add hero banner image to homepage" && \
   GIT_SSH_COMMAND="ssh -i $KEY_TMP -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/dev/null" \
   git push git@github.com:Bluetradeai/Blue-Trade-Ai-Website.git HEAD:main
 
